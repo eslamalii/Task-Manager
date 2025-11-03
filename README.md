@@ -1,50 +1,120 @@
-# Welcome to your Expo app 👋
+# Task Manager App 📝
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A beautiful and intuitive Task Manager application built with React Native and Expo. Manage your daily tasks with ease, featuring smooth animations, haptic feedback, dark/light mode, and a clean modern design.
 
-## Get started
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## ✨ Features
 
-2. Start the app
+- ✅ **Full CRUD Operations** - Create, read, update, and delete tasks
+- 🎨 **Dark/Light Mode** - Automatic theme switching with system preferences
+- 📳 **Haptic Feedback** - Tactile response on all interactions
+- � **Real-time Statistics** - Track total, completed, and pending tasks
+- ⏰ **Smart Timestamps** - Relative time display (e.g., "2 mins ago")
+- 🎯 **Input Validation** - Character counter and error messages
+- 📱 **Cross-Platform** - Works on iOS, Android, and Web
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🚀 Getting Started
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Prerequisites
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **Node.js** (v16 or higher)
+- **npm** or **yarn**
+- **Expo Go app** (optional, for physical device testing)
 
-## Get a fresh project
-
-When you're ready, run:
+### Installation
 
 ```bash
-npm run reset-project
+# Clone the repository
+git clone git@github.com:eslamalii/Task-Manager.git
+cd TaskManagerApp
+
+# Install dependencies
+npm install
+
+# Start development server
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Running the App
 
-## Learn more
+- **iOS Simulator**: Press `i`
+- **Android Emulator**: Press `a`
+- **Web Browser**: Press `w`
+- **Physical Device**: Scan QR code with Expo Go app
 
-To learn more about developing your project with Expo, look at the following resources:
+---
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 🛠️ Tech Stack
 
-## Join the community
+- **React Native** (0.76.5) - Mobile framework
+- **Expo** (~54.0.20) - Development platform
+- **TypeScript** (~5.9.2) - Type safety
+- **React Native Reanimated** (~4.1.1) - Animations
+- **Expo Haptics** (~15.0.7) - Tactile feedback
+- **Expo Router** (~4.1.7) - File-based routing
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## � Project Structure
+
+```
+app/
+├── (tabs)/
+│   └── index.tsx           # Main task screen
+└── _layout.tsx             # Root layout
+
+components/
+└── task/
+    ├── AddTaskForm.tsx     # Input form
+    ├── TaskItem.tsx        # Task card
+    ├── TaskList.tsx        # List container
+    └── EmptyState.tsx      # Empty state
+
+constants/
+├── taskConstants.ts        # App constants
+└── theme.ts               # Color themes
+
+types/
+└── task.ts                # TypeScript types
+
+utils/
+└── taskHelpers.ts         # Helper functions
+```
+
+---
+
+## 🎨 Key Features
+
+### Theme System
+
+- Complete dark/light mode support
+
+### Smart Sorting
+
+- Incomplete tasks appear first
+- Completed tasks sorted by date
+- Smooth reordering animations
+
+### Performance
+
+- React.memo optimization
+- useCallback for handlers
+- FlatList for efficient rendering
+- UI-thread animations
+
+---
+
+## 📱 Platform Support
+
+| Platform | Status | Features                    |
+| -------- | ------ | --------------------------- |
+| iOS      | ✅     | Full support with haptics   |
+| Android  | ✅     | Full support with haptics   |
+| Web      | ✅     | No haptics, browser confirm |

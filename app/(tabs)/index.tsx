@@ -1,98 +1,298 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { AddTaskForm, TaskList } from '@/components/task'
+import { ThemedText } from '@/components/themed-text'
+import { ThemedView } from '@/components/themed-view'
+import { Colors } from '@/constants/theme'
+import { useColorScheme } from '@/hooks/use-color-scheme'
+import { Task } from '@/types/task'
+import { createTask, getTaskStatistics, sortTasks } from '@/utils/taskHelpers'
+import { Ionicons } from '@expo/vector-icons'
+import * as Haptics from 'expo-haptics'
+import React, { useCallback, useState } from 'react'
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native'
+import Animated, { FadeIn, FadeInDown, Layout } from 'react-native-reanimated'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+/**
+ * TaskManagerScreen - Main screen for the Task Manager app
+ * Manages the state of all tasks and handles task operations
+ */
+export default function TaskManagerScreen() {
+  const [tasks, setTasks] = useState<Task[]>([])
+  const colorScheme = useColorScheme()
+  const colors = Colors[colorScheme ?? 'light']
 
-export default function HomeScreen() {
+  /**
+   * Add a new task to the list
+   */
+  const handleAddTask = useCallback((description: string) => {
+    const newTask = createTask(description)
+    setTasks((prevTasks) => {
+      const updatedTasks = [...prevTasks, newTask]
+      return sortTasks(updatedTasks)
+    })
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+  }, [])
+
+  /**
+   * Toggle task completion status
+   */
+  const handleToggleComplete = useCallback((taskId: string) => {
+    setTasks((prevTasks) => {
+      const updatedTasks = prevTasks.map((task) =>
+        task.id === taskId ? { ...task, isCompleted: !task.isCompleted } : task
+      )
+      return sortTasks(updatedTasks)
+    })
+  }, [])
+
+  /**
+   * Delete a task from the list
+   */
+  const handleDeleteTask = useCallback((taskId: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId))
+  }, [])
+
+  // Calculate task statistics
+  const stats = getTaskStatistics(tasks)
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <View style={[styles.wrapper, { backgroundColor: colors.background }]}>
+      <SafeAreaView
+        style={[styles.safeArea, { backgroundColor: colors.background }]}
+        edges={['top']}
+      >
+        <KeyboardAvoidingView
+          style={[styles.container, { backgroundColor: colors.background }]}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        >
+          <ThemedView
+            style={[styles.container, { backgroundColor: colors.background }]}
+          >
+            {/* Header */}
+            <View
+              style={[styles.header, { backgroundColor: colors.background }]}
+            >
+              {/* Task Statistics */}
+              {tasks.length > 0 && (
+                <Animated.View
+                  entering={FadeInDown.duration(400).springify()}
+                  layout={Layout.springify()}
+                >
+                  <View style={styles.statsGrid}>
+                    <Animated.View
+                      style={[
+                        styles.statCard,
+                        {
+                          backgroundColor: colors.cardBackground,
+                          borderColor: colors.indigo,
+                        },
+                      ]}
+                      entering={FadeIn.delay(100).duration(400).springify()}
+                    >
+                      <View style={styles.iconContainer}>
+                        <View
+                          style={[
+                            styles.iconBackground,
+                            { backgroundColor: colors.indigoLight },
+                          ]}
+                        >
+                          <Ionicons
+                            name="list"
+                            size={18}
+                            color={colors.indigo}
+                          />
+                        </View>
+                      </View>
+                      <ThemedText
+                        style={[styles.statValue, { color: colors.indigo }]}
+                      >
+                        {stats.total}
+                      </ThemedText>
+                      <ThemedText
+                        style={[
+                          styles.statLabel,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        Total Tasks
+                      </ThemedText>
+                    </Animated.View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+                    <Animated.View
+                      style={[
+                        styles.statCard,
+                        {
+                          backgroundColor: colors.cardBackground,
+                          borderColor: colors.green,
+                        },
+                      ]}
+                      entering={FadeIn.delay(200).duration(400).springify()}
+                    >
+                      <View style={styles.iconContainer}>
+                        <View
+                          style={[
+                            styles.iconBackground,
+                            { backgroundColor: colors.greenLight },
+                          ]}
+                        >
+                          <Ionicons
+                            name="checkmark-circle"
+                            size={18}
+                            color={colors.green}
+                          />
+                        </View>
+                      </View>
+                      <ThemedText
+                        style={[styles.statValue, { color: colors.green }]}
+                      >
+                        {stats.completed}
+                      </ThemedText>
+                      <ThemedText
+                        style={[
+                          styles.statLabel,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        Completed
+                      </ThemedText>
+                    </Animated.View>
+
+                    <Animated.View
+                      style={[
+                        styles.statCard,
+                        {
+                          backgroundColor: colors.cardBackground,
+                          borderColor: colors.amber,
+                        },
+                      ]}
+                      entering={FadeIn.delay(300).duration(400).springify()}
+                    >
+                      <View style={styles.iconContainer}>
+                        <View
+                          style={[
+                            styles.iconBackground,
+                            { backgroundColor: colors.amberLight },
+                          ]}
+                        >
+                          <Ionicons
+                            name="hourglass"
+                            size={18}
+                            color={colors.amber}
+                          />
+                        </View>
+                      </View>
+                      <ThemedText
+                        style={[styles.statValue, { color: colors.amber }]}
+                      >
+                        {stats.pending}
+                      </ThemedText>
+                      <ThemedText
+                        style={[
+                          styles.statLabel,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        Pending
+                      </ThemedText>
+                    </Animated.View>
+                  </View>
+                </Animated.View>
+              )}
+            </View>
+
+            {/* Add Task Form */}
+            <View
+              style={[
+                styles.formContainer,
+                { backgroundColor: colors.background },
+              ]}
+            >
+              <AddTaskForm onAddTask={handleAddTask} />
+            </View>
+
+            {/* Task List */}
+            <View
+              style={[
+                styles.listContainer,
+                { backgroundColor: colors.background },
+              ]}
+            >
+              <TaskList
+                tasks={tasks}
+                onToggleComplete={handleToggleComplete}
+                onDelete={handleDeleteTask}
+              />
+            </View>
+          </ThemedView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  wrapper: {
+    flex: 1,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 12,
+  },
+  statsGrid: {
     flexDirection: 'row',
+    gap: 12,
+    justifyContent: 'space-between',
+  },
+  statCard: {
+    flex: 1,
     alignItems: 'center',
-    gap: 8,
+    borderRadius: 24,
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    boxShadow: '0px 2px 12px rgba(99, 102, 241, 0.12)',
+    minHeight: 95,
+    borderWidth: 2,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  iconContainer: {
+    marginBottom: 6,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  iconBackground: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-});
+  statValue: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: 2,
+    marginBottom: 4,
+    letterSpacing: -0.5,
+  },
+  statLabel: {
+    fontSize: 10,
+    marginTop: 0,
+    fontWeight: '500',
+    textTransform: 'capitalize',
+    letterSpacing: 0.2,
+  },
+  formContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 12,
+  },
+  listContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 8,
+  },
+})
