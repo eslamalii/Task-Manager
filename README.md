@@ -53,12 +53,12 @@ npx expo start
 
 ## 🛠️ Tech Stack
 
-- **React Native** (0.76.5) - Mobile framework
-- **Expo** (~54.0.20) - Development platform
-- **TypeScript** (~5.9.2) - Type safety
-- **React Native Reanimated** (~4.1.1) - Animations
-- **Expo Haptics** (~15.0.7) - Tactile feedback
-- **Expo Router** (~4.1.7) - File-based routing
+- **React Native** - Mobile framework
+- **Expo** - Development platform
+- **TypeScript** - Type safety
+- **React Native Reanimated** - Animations
+- **Expo Haptics** - Tactile feedback
+- **Expo Router** - File-based routing
 
 ---
 
