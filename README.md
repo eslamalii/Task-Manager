@@ -8,19 +8,19 @@ A beautiful and intuitive Task Manager application built with React Native and E
 
 ---
 
-## ✨ Features
+## Features
 
-- ✅ **Full CRUD Operations** - Create, read, update, and delete tasks
-- 🎨 **Dark/Light Mode** - Automatic theme switching with system preferences
-- 📳 **Haptic Feedback** - Tactile response on all interactions
-- � **Real-time Statistics** - Track total, completed, and pending tasks
-- ⏰ **Smart Timestamps** - Relative time display (e.g., "2 mins ago")
-- 🎯 **Input Validation** - Character counter and error messages
-- 📱 **Cross-Platform** - Works on iOS, Android, and Web
+- **Full CRUD Operations** - Create, read, update, and delete tasks
+- **Dark/Light Mode** - Automatic theme switching with system preferences
+- **Haptic Feedback** - Tactile response on all interactions
+- **Real-time Statistics** - Track total, completed, and pending tasks
+- **Smart Timestamps** - Relative time display (e.g., "2 mins ago")
+- **Input Validation** - Character counter and error messages
+- **Cross-Platform** - Works on iOS, Android, and Web
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -51,7 +51,7 @@ npx expo start
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **React Native** - Mobile framework
 - **Expo** - Development platform
@@ -62,7 +62,7 @@ npx expo start
 
 ---
 
-## � Project Structure
+## Project Structure
 
 ```
 app/
@@ -90,7 +90,7 @@ utils/
 
 ---
 
-## 🎨 Key Features
+## Key Features
 
 ### Theme System
 
@@ -111,7 +111,7 @@ utils/
 
 ---
 
-## 📱 Platform Support
+## Platform Support
 
 | Platform | Status | Features                    |
 | -------- | ------ | --------------------------- |
